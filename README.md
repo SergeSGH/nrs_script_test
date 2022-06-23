@@ -4,7 +4,7 @@
 Google sheets API: https://developers.google.com/sheets/
 ```
 ```
-Central bank API via xml https://www.cbr.ru/development/SXML/
+Central bank API via xml: https://www.cbr.ru/development/SXML/
 ```
 ```
 Django REST Framework, PostgerSQL, Celery, RabbitMQ, Telegram API
@@ -14,10 +14,7 @@ Django REST Framework, PostgerSQL, Celery, RabbitMQ, Telegram API
 
 Клонировать репозиторий и перейти в него в командной строке:
 ```
-git clone https://github.com/SergeSGH/infra_sp2.git
-```
-```
-cd infra_sp2/infra
+git clone https://github.com/SergeSGH/nrs_script_test.git
 ```
 
 В папке проекта создать файл .env в котором определить ключевые переменные:
@@ -31,6 +28,8 @@ DB_PORT: порт БД
 TELEGRAM_TOKEN: токен бота телеграм
 CHAT_ID: id клиента Telegram, которому будет отправляться сообщение
 ```
+
+В папку с manage.py скопировать json файл с ключом для Google sheets 
 
 Собрать и запустить контейнеры:
 ```
