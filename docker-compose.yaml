@@ -1,12 +1,14 @@
 version: '3.8'
+volumes:
+  static_data:
+  db_data:
 
 
 services:
-
   db:
     image: postgres:13.0-alpine
     volumes:
-      - /var/lib/postgresql/data/
+      - db_data:/var/lib/postgresql/data/
     env_file:
       - ./.env
 
@@ -14,26 +16,28 @@ services:
     build: ./script_db
     restart: always
     volumes:
-      - static_value:/app/static/
-      - media_value:/app/media/
+      - static_data:/app/static/
     depends_on:
       - db
     env_file:
       - ./.env
 
+  # frontend:
+  #   build:
+  #     context: ./react-interface
+  #     dockerfile: Dockerfile
+  #   volumes:
+  #     - ./react-interface/:/app/result_build/
+  #   depends_on:
+  #     - web
+
   nginx:
     image: nginx:1.21.3-alpine
     ports:
       - "80:80"
-
     volumes:
       - ./default.conf:/etc/nginx/conf.d/default.conf
-      - static_value:/var/html/static/
-      - media_value:/var/html/media/
-
+      - static_data:/var/html/static/
+  #     - ./react-interface/build:/usr/share/nginx/html/
     depends_on:
       - web
-
-volumes:
-  static_value:
-  media_value:

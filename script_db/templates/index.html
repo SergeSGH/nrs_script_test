@@ -1,0 +1,62 @@
+{% load static %}
+<!DOCTYPE html>
+{% csrf_token %}
+
+<html lang="ru">
+  <head>    
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="icon" href="{% static 'img/fav/fav.ico' %}" type="image">
+    <link rel="apple-touch-icon" sizes="180x180" href="{% static 'img/fav/apple-touch-icon.png' %}">
+    <link rel="icon" type="image/png" sizes="32x32" href="{% static 'img/fav/favicon-32x32.png' %}">
+    <link rel="icon" type="image/png" sizes="16x16" href="{% static 'img/fav/favicon-16x16.png' %}">
+    <meta name="msapplication-TileColor" content="#da532c">
+    <meta name="theme-color" content="#ffffff">
+    <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+    <title>Обовление БД Google Sheets</title>
+  </head>
+  <body>
+    <main>
+      <nav class="navbar navbar-light" style="background-color: white_paste">
+        <div class="container">
+            <div class="col-md-2 col-sm-2 col-xs-2">
+              <strong>Обновление данных</strong>
+            </div>
+        </div>
+      </nav>
+
+      <div class="container">
+
+        <div class="row">
+          <div class="col-md-6 col-sm-6 col-xs-6">
+            Записей в БД: {{ records_count }}
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-md-2 col-sm-2 col-xs-2">
+            <form action="/records/update_data/" method="GET">
+            {% csrf_token %}
+              <button type="submit" class="btn btn-primary">Обновить БД</button>
+            </form>
+          </div>
+          <div class="col-md-3 col-sm-3 col-xs-3">
+            <form action="/records/update_deadlines/" method="GET">
+            {% csrf_token %}
+              <button type="submit" class="btn btn-success">Проверить дедлайны</button>
+            </form>
+          </div>
+        </div>
+
+      </div>
+
+      <nav class="navbar navbar-light" style="background-color: white_paste">
+        <div class="container">
+          <p> 
+            {% now "Y" %}<span style="color:red">DB</span>update 
+          </p> 
+        </div>
+      </nav>
+    </main>        
+  </body>
+</html>

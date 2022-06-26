@@ -1,0 +1,38 @@
+{# страница формы обратной связи #}
+{% extends "base.html" %}
+{% block page_title %}Оставить заявку{% endblock %}
+{% block content %}
+  <div class="row justify-content-center">
+    <div class="co12-md-12 col-sm-12 col-xs-12">
+    <h3 class="justifyleft">
+      <span style="color: #99cc00;">
+        Заполните форму, и мы свяжемся по указанным контактам
+      </span>
+    </h3>
+    </div>  
+    <div class="col-md-10 p-5">
+      <div class="card">
+        <div class="card-body">
+          {% load user_filters %} {# Загружаем фильтры #}
+          <div class="container">
+            <form method="post">
+              <div class="row">
+              {% csrf_token %}
+              {% for field in form %}
+                <div class="col-md-5 col-sm-7 col-xs-9">
+                  {{ field|addclass:'form-control' }}
+                  {{ field.help_text|safe }}
+                </div>
+              {% endfor%}
+              </div>
+              <br>
+              <button type="submit" class="btn btn-primary">
+                Отправить
+              </button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %} 

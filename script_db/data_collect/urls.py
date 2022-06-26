@@ -1,9 +1,9 @@
-from django.urls import include, path
-from rest_framework.routers import DefaultRouter
+from django.urls import path
 
-from .views import RecordViewSet
+from .views import OnePageView, UpdateDB, UpdateDL
 
-router = DefaultRouter()
-router.register('records', RecordViewSet, basename='records')
-
-urlpatterns = (path('', include(router.urls)),)
+urlpatterns = (
+    path('', OnePageView, name='index'),
+    path('records/update_data/', UpdateDB, name='updatedb'),
+    path('records/update_deadlines/', UpdateDL, name='updatedl'),
+)
