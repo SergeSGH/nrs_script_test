@@ -1,4 +1,4 @@
-import os.path
+import os
 from django.shortcuts import redirect, render
 
 from .models import Record
@@ -9,18 +9,23 @@ from .forms import TelegramIDForm
 def OnePageView(request):
     template = 'index.html'
     records_count = Record.objects.all().count()
-
     form = TelegramIDForm(request.POST or None)
     if request.method == 'POST' and form.is_valid():
         telegram_id = form.cleaned_data['telegram_id']
-        with open('telegram_id.txt', 'w', encoding="utf-8") as f:
-            f.write(str(telegram_id))
-            form = TelegramIDForm()
-    if os.path.isfile('telegram_id.txt'):
-        with open('telegram_id.txt', 'r', encoding="utf-8") as f:
-            telegram_id = f.read()
+        if telegram_id != 0:
+            with open('telegram_id.txt', 'w', encoding="utf-8") as f:
+                f.write(str(telegram_id))
+        else:
+            if os.path.isfile('telegram_id.txt'):
+                os.remove('telegram_id.txt')
+            telegram_id = 'не установлен'
+        form = TelegramIDForm()
     else:
-        telegram_id = 'не установлен'
+        if os.path.isfile('telegram_id.txt'):
+            with open('telegram_id.txt', 'r', encoding="utf-8") as f:
+                telegram_id = f.read()
+        else:
+            telegram_id = 'не установлен'
     context = {
         'records_count': records_count,
         'telegram_id': telegram_id,

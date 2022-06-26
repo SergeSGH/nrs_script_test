@@ -44,21 +44,18 @@ def check_deadlines():
     if os.path.isfile('telegram_id.txt'):
         with open('telegram_id.txt', 'r', encoding="utf-8") as f:
             chat_id = f.read()
-    else:
-        chat_id = 0
-    chat_id = os.getenv('CHAT_ID')
-    bot = Bot(token=token)
-    records_for_today = Record.objects.filter(delivery_date=dt.date.today())
-    if records_for_today.count() != 0:
-        message = 'Заказы на сегодня\n'
-        for record in records_for_today:
-            message += '№ заказа: {0}, стоимость: {1} руб.\n'.format(
-                record.order_num, record.cost_rub
-            )
-    else:
-        message = 'Заказов на сегодня нет\n'
-    if chat_id:
-        bot.send_message(chat_id, message)
+        bot = Bot(token=token)
+        records_for_today = Record.objects.filter(delivery_date=dt.date.today())
+        if records_for_today.count() != 0:
+            message = 'Заказы на сегодня\n'
+            for record in records_for_today:
+                message += '№ заказа: {0}, стоимость: {1} руб.\n'.format(
+                    record.order_num, record.cost_rub
+                )
+        else:
+            message = 'Заказов на сегодня нет\n'
+        if chat_id:
+            bot.send_message(chat_id, message)
 
 
 @app.task
