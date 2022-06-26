@@ -26,29 +26,54 @@
       </nav>
 
       <div class="container">
-
-        <div class="row">
-          <div class="col-md-6 col-sm-6 col-xs-6">
-            Записей в БД: {{ records_count }}
-          </div>
-        </div>
-
         <div class="row">
           <div class="col-md-2 col-sm-2 col-xs-2">
+            <div class="row">
+              <div>
+                Записей в БД: {{ records_count }}
+              </div>
+            </div>
             <form action="/records/update_data/" method="GET">
-            {% csrf_token %}
+              {% csrf_token %}
               <button type="submit" class="btn btn-primary">Обновить БД</button>
             </form>
           </div>
-          <div class="col-md-3 col-sm-3 col-xs-3">
+          <div class="col-md-4 col-sm-4 col-xs-4">
+            <div class="row">
+              <div>
+                Telegram ID: {{ telegram_id }}
+              </div>
+            </div>
             <form action="/records/update_deadlines/" method="GET">
-            {% csrf_token %}
+              {% csrf_token %}
               <button type="submit" class="btn btn-success">Проверить дедлайны</button>
             </form>
           </div>
         </div>
-
       </div>
+      <br>
+      <div class="container">
+      {% load user_filters %}
+      <form method="post">
+        {% csrf_token %}
+        <div class="row">
+          <div class="col-md-3 col-sm-3 col-xs-3">
+            {{ form.telegram_id|addclass:'form-control' }}
+          </div>
+
+
+
+          <div class="col-md-3 col-sm-3 col-xs-3">
+            <button type="submit" class="btn btn-primary">
+              Установить Telegram ID
+            </button>
+          </div>
+        </div>
+      </form>
+    </div>
+
+
+
 
       <nav class="navbar navbar-light" style="background-color: white_paste">
         <div class="container">

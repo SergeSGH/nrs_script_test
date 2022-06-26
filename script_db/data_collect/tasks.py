@@ -41,6 +41,11 @@ from script_db.celery import app
 def check_deadlines():
     """ Collects records with deadline today from the db and sends message """
     token = os.getenv('TELEGRAM_TOKEN')
+    if os.path.isfile('telegram_id.txt'):
+        with open('telegram_id.txt', 'r', encoding="utf-8") as f:
+            chat_id = f.read()
+    else:
+        chat_id = 0
     chat_id = os.getenv('CHAT_ID')
     bot = Bot(token=token)
     records_for_today = Record.objects.filter(delivery_date=dt.date.today())
@@ -52,7 +57,8 @@ def check_deadlines():
             )
     else:
         message = 'Заказов на сегодня нет\n'
-    bot.send_message(chat_id, message)
+    if chat_id:
+        bot.send_message(chat_id, message)
 
 
 @app.task
