@@ -40,5 +40,5 @@ def UpdateDB(request):
 
 
 def UpdateDL(request):
-    check_deadlines()
+    check_deadlines.delay()
     return redirect('/')

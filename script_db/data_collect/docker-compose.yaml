@@ -1,0 +1,113 @@
+version: '3.8'
+volumes:
+  db_data:
+  #web_data2:
+  static_data2:
+
+services:
+  db:
+    image: postgres:13.0-alpine
+    volumes:
+      - db_data:/var/lib/postgresql/data/
+    env_file:
+      - ./.env
+
+  rabbit:
+    restart: always
+    image: rabbitmq
+    hostname: rabbit
+    environment:
+      RABBITMQ_DEFAULT_USER: "rabbitmq"
+      RABBITMQ_DEFAULT_PASS: "rabbitmq"
+      RABBITMQ_DEFAULT_VHOST: "/"
+    ports:
+      - "5672:5672"
+    #depends_on:
+    #  - db
+
+  web:
+    build: ./script_db
+    # container_name: 'app'
+    restart: always
+    command: bash -c "
+      gunicorn script_db.wsgi:application --bind 0:8000 &
+      celery -A script_db worker --loglevel=info --pool=solo -B"
+    # python manage.py collectstatic"
+    #command: python manage.py runserver 0.0.0.0:8000
+    volumes:
+      #- web_data2:/app
+      - static_data2:/app/static/
+    depends_on:
+      - db
+    links:
+      - rabbit
+    env_file:
+      - ./.env
+    environment:
+      # NOTE: Below we are using 127.0.0.1 because this container
+      # will run on the host network, thus it will have access to the
+      # host network.
+      # If it would not have run locally, we would have had to
+      # connect using the service name like following:
+      # amqp:rabbitmq_server:5672
+      rabbitmq_uri: amqp://rabbit:5672
+    #ports:
+    #  - '8000:8000'
+    #ports:
+    #  - "5555:5555"
+
+  #celery:
+  #  build: ./script_db
+  #  container_name: 'app_celery'
+  #  command: celery -A script_db worker --loglevel=info --pool=solo
+    #environment:
+      # NOTE: Below we are using 127.0.0.1 because this container
+      # will run on the host network, thus it will have access to the
+      # host network.
+      # If it would not have run locally, we would have had to
+      # connect using the service name like following:
+      # amqp:rabbitmq_server:5672
+      # rabbitmq_uri: amqp://rabbit:5672
+    
+    #volumes:
+    #  - web_data2:/app
+    #links:
+    #  - rabbit
+    #depends_on:
+    #  - web
+    #  - rabbit
+
+  #celerybeat:
+  #  build: ./script_db
+  #  container_name: 'app_celery_beat'
+  #  command: celery -A script_db beat -l INFO
+  #  volumes:
+  #    - web_data1:/app
+  #  links:
+  #    - celery
+  #  depends_on:
+  #    - web
+  #    - celery
+
+
+  # frontend:
+  #   build:
+  #     context: ./react-interface
+  #     dockerfile: Dockerfile
+  #   volumes:
+  #     - ./react-interface/:/app/result_build/
+  #   depends_on:
+  #     - web
+
+  nginx:
+    image: nginx:1.21.3-alpine
+    container_name: 'nginx'
+    ports:
+      - "80:80"
+    volumes:
+      - ./default.conf:/etc/nginx/conf.d/default.conf
+      - static_data2:/var/html/static/
+    #   - ./react-interface/build:/usr/share/nginx/html/
+    depends_on:
+      - web
+    #  - celery

@@ -11,7 +11,7 @@ Central bank API via xml: https://www.cbr.ru/development/SXML/
 Django REST Framework, PostgerSQL, Celery, RabbitMQ, Telegram API
 ```
 ```
-Frontend работает на Django, подготовлена структура фронта на React
+Frontend (SPA) работает на Django, подготовлена структура фронта на React
 ```
 
 
@@ -40,4 +40,11 @@ docker-compose up -d --build
 ```
 docker-compose exec web python manage.py migrate
 docker-compose exec web python manage.py createsuperuser
+```
+Проект будет работать по адресу http://localhost:
+```
+Обновление базы данных: каждую минуту
+Отправка сообщения Telegram о запланированных заказах: 8:00 каждый день
+(функционал немного от задания, но можно дополнитеьно
+настроить отправку сообщений о просроченных заказах)
 ```
