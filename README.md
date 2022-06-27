@@ -43,11 +43,7 @@ docker-compose up -d --build
 docker-compose exec web python manage.py migrate
 docker-compose exec web python manage.py createsuperuser
 ```
-<<<<<<< HEAD
 Статика уже собрана для деплоя. Проект будет работать по адресу http://localhost/
-=======
-Статика уже собрана для деплоя. Проект будет работать по адресу http://localhost:
->>>>>>> 37ffe472eeaadf0e2619e3d9fbcd24a7fb567beb
 ```
 Обновление базы данных: каждую минуту
 Отправка сообщения Telegram о запланированных заказах: 8:00 каждый день
